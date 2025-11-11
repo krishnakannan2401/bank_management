@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Customers - Bank Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2><i class="bi bi-people"></i> Manage Customers</h2>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <form method="GET" class="d-flex">
+            <input type="text" class="form-control me-2" name="search" placeholder="Search by name, username, or phone..." value="{{ search_query }}">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i> Search
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Customer List</h5>
+            </div>
+            <div class="card-body">
+                {% if page_obj %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Account Number</th>
+                                    <th>Balance</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in page_obj %}
+                                <tr>
+                                    <td>{{ customer.user.username }}</td>
+                                    <td>{{ customer.user.get_full_name|default:"N/A" }}</td>
+                                    <td>{{ customer.user.email }}</td>
+                                    <td>{{ customer.phone }}</td>
+                                    <td>
+                                        {% if customer.account %}
+                                            {{ customer.account.account_number }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if customer.account %}
+                                            ₹{{ customer.account.balance|floatformat:2 }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if customer.is_approved %}
+                                            <span class="badge bg-success">Approved</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% endif %}
+                                        {% if customer.account %}
+                                            {% if customer.account.is_active %}
+                                                <span class="badge bg-info">Active</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Inactive</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if not customer.is_approved %}
+                                            <a href="{% url 'approve_customer' customer.id %}" class="btn btn-sm btn-success">
+                                                <i class="bi bi-check-circle"></i> Approve
+                                            </a>
+                                        {% endif %}
+                                        {% if customer.account %}
+                                            {% if customer.account.is_active %}
+                                                <a href="{% url 'deactivate_customer' customer.id %}" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-x-circle"></i> Deactivate
+                                                </a>
+                                            {% else %}
+                                                <a href="{% url 'activate_customer' customer.id %}" class="btn btn-sm btn-success">
+                                                    <i class="bi bi-check-circle"></i> Activate
+                                                </a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+                                </li>
+                            {% endif %}
+                            
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                                </span>
+                            </li>
+                            
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% else %}
+                    <p class="text-center text-muted">No customers found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

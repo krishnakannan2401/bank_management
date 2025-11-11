@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Bank Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center mb-5">
+        <h1 class="display-4 mb-4">Welcome to Bank Management System</h1>
+        <p class="lead">Secure, Fast, and Reliable Banking Solutions</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-shield-check display-1 text-primary mb-3"></i>
+                <h5 class="card-title">Secure Banking</h5>
+                <p class="card-text">Your data and transactions are protected with industry-standard security measures.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-lightning-charge display-1 text-warning mb-3"></i>
+                <h5 class="card-title">Fast Transactions</h5>
+                <p class="card-text">Complete your banking operations quickly and efficiently.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-phone display-1 text-success mb-3"></i>
+                <h5 class="card-title">24/7 Access</h5>
+                <p class="card-text">Access your account anytime, anywhere with our web-based platform.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-12 text-center">
+        {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg me-3">
+                <i class="bi bi-person-plus"></i> Create Account
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+        {% else %}
+            {% if user.is_staff %}
+                <a href="{% url 'admin_dashboard' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-speedometer2"></i> Go to Admin Dashboard
+                </a>
+            {% else %}
+                <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-speedometer2"></i> Go to Dashboard
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

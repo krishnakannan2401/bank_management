@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports - Bank Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2><i class="bi bi-graph-up"></i> Reports & Statistics</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="bi bi-cash-stack"></i> Transaction Summary</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td><strong>Total Deposits:</strong></td>
+                        <td class="text-success">₹{{ total_deposits|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Withdrawals:</strong></td>
+                        <td class="text-danger">₹{{ total_withdrawals|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Transfers:</strong></td>
+                        <td class="text-info">₹{{ total_transfers|floatformat:2 }}</td>
+                    </tr>
+                    <tr class="table-primary">
+                        <td><strong>Net Transaction Value:</strong></td>
+                        <td><strong>₹{{ total_balance|floatformat:2 }}</strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="bi bi-bank"></i> Account Statistics</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td><strong>Total Balance (All Accounts):</strong></td>
+                        <td class="text-primary">₹{{ total_balance|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Active Accounts:</strong></td>
+                        <td class="text-success">{{ active_accounts }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Inactive Accounts:</strong></td>
+                        <td class="text-danger">{{ inactive_accounts }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Financial Overview</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <h3 class="text-success">₹{{ total_deposits|floatformat:2 }}</h3>
+                        <p class="text-muted">Total Deposits</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h3 class="text-danger">₹{{ total_withdrawals|floatformat:2 }}</h3>
+                        <p class="text-muted">Total Withdrawals</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h3 class="text-primary">₹{{ total_balance|floatformat:2 }}</h3>
+                        <p class="text-muted">Total Bank Balance</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
